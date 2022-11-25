@@ -37,12 +37,12 @@ We can also look a the price against the number of rooms:
   <img src='https://user-images.githubusercontent.com/96018383/203933914-72c5ffae-772d-47cd-b64a-b82d0d61a8fe.png'>
 </p>
 
-From this figure, we can see that the more rooms we have, the higher the price is.
+From this figure, we can see that the more rooms we have, the higher the price is. We can also notice that some properties don't have any rooms.
 
 ## Creation of new features
 
 So far, we only have 4 features to guess the price of a property: the number of bedrooms, the number of bathrooms, the latitude and the longitude.
-We create  4 more features: the number of rooms (bedrooms + bathrooms), the polar coordinate (from the latitude and longitude) with a center in downtown Toronto and we map the region to a different number.
+We create  4 more features: the number of rooms (bedrooms + bathrooms), the polar coordinates r and $\theta$ (from the latitude and longitude) with a center in downtown Toronto and we map the region to a different number.
 
 ## Neural Network
 
