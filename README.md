@@ -61,8 +61,11 @@ After training over 1000 epochs, we get the following results for the loss funct
  The failure of predicting the real estate price correctly probably comes from the lack of enough data.
  First, we only have around 5000 properties(split between training and testing) and second, we have few data points for each property. We only have rooms information and the property location but we don't know if it's a house or an apartment, the number of floors, the sqft, whether it has a garden or not, what is the view, etc.
  
+ If we try with a simple regression (with a gradient descent) we have similar results (regression.py)
+ 
  Conclusion: we need more and better data to improve this model.
  
+
 
 
 
