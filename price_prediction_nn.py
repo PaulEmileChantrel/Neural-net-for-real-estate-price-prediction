@@ -68,7 +68,7 @@ y = df['price'].to_numpy().astype('float32')
 
 
 
-X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.25, random_state=1)
+X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.15, random_state=1)
 print(X_train.shape,X_test.shape,y_train.shape,y_test.shape)
 # print(X_train,y_train)
 
@@ -93,12 +93,12 @@ model = Sequential([
 
 model.compile(
     loss=tf.keras.losses.MeanSquaredError(),
-    optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+    optimizer=tf.keras.optimizers.Adam(learning_rate=0.003),
 )
 
 history = model.fit(
     X_train,y_train,
-    epochs=1000,
+    epochs=200,
     validation_data=(X_test,y_test)
 )
 

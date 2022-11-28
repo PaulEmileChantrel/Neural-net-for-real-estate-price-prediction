@@ -4,7 +4,7 @@ import pandas as pd
 import geopandas
 from geopy.geocoders import Nominatim
 from geopy.extra.rate_limiter import RateLimiter
-
+from nn_utils_function import *
 
 # df = pd.read_csv('clean_combined_toronto_property_data.csv',sep=';')
 #
@@ -53,13 +53,29 @@ map1 = folium.Map(
 # print(df['price'].max(),df['price'].min())
 # ax = df['price'].plot.hist(bins=30)
 # plt.yscale('log')
+# plt.xlabel('Price')
+# plt.title('Price Distribution of Greatest Toronto Area property')
 # plt.show()
 
-# df['rooms'] = df['bathrooms']+df['bedrooms']
+df['rooms'] = df['bathrooms']+df['bedrooms']
+
+x =  df['rooms'].to_numpy()
+y = df['price'].to_numpy()
+plt.scatter(x,y,marker='+')
+plt.ylabel('Price')
+plt.yscale('log')
+plt.xlabel('Rooms (Bedrooms + Bathrooms)')
+plt.title('Real Estate price as a function of the rooms number')
+plt.show()
 #
-# x =  df['rooms'].to_numpy()
+# r,theta = carth_to_polar(df['latitude'],df['longitude'])
+#
+# x =  r.to_numpy()
 # y = df['price'].to_numpy()
 # plt.scatter(x,y,marker='+')
+# plt.ylabel('Price')
+# plt.xlabel('Distance ftom Downtown Toronto')
+# plt.title('Real Estate price as a function of the distance from Downtown Toronto')
 # plt.show()
 
 def color_producer(col):
@@ -71,6 +87,7 @@ def color_producer(col):
     sep2 = (max_price - min_price)/16
     sep3 = (max_price - min_price)/8
     sep4 = (max_price - min_price)/4
+
     if col>sep4:
         return 'red'
     elif col > sep3:
@@ -87,4 +104,4 @@ df.apply(lambda row:folium.CircleMarker(location=[row["latitude"], row["longitud
                             color = color_producer(row["price"]),
                             fill_opacity=1).add_to(map1), axis=1)
 map1.save("map.html")
-webbrowser.open('file://' + os.path.realpath("map.html"))
+#webbrowser.open('file://' + os.path.realpath("map.html"))
