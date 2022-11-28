@@ -1,4 +1,4 @@
-clean_combined_toronto_property_data_with_lat_long.csv
+clean_combined_toronto_property_data_with_lat_long.csv*
 real_estate_data.py
 redfin_data.py
 test.csv
@@ -10,3 +10,5 @@ tes.html
 test.html
 scraper.py
 .gitignore
+realtor-data.csv
+
