@@ -72,6 +72,19 @@ After training over 1000 epochs, we get the following results for the loss funct
 For the V2, we use the following data set : https://www.kaggle.com/datasets/ahmedshahriarsakib/usa-real-estate-dataset
 This dataset cointains real estate properties all over the US and have 2 additional parameters compare to our previous dataset : the house size and the lot size.
 
-To simplify our problem, we only keep data from New York City.
+To simplify our problem, we only keep data from New York City and its surrounding.
 We also filter out rows with missing data for the bedrooms, bathrooms, house size and lot size.
+
+After cleaning, i.e. removing duplicate rows and rows with missing data and rows where the latitude and longitude were not found, we only have __ properties left.
+Here is the loss on the training and validation set during training.
+
+This time, we considere a price match if the predicted price in with +/- x% where x is a variable between 5% and 30%.
+We also calculte the error before training our model to get a randome error baseline : 
+| Accepted margin of error for <br>a correct guess ( +/-x) | Correct random guess  |
+|---------------------------------------------------------|-----------------------|
+| 5 %                                                     | 6 %                   |
+| 10 %                                                    | 15 %                  |
+| 15 %                                                    | 22 %                  |
+| 20 %                                                    | 28 %                  |
+| 30 %                                                    | 47 %                  |
 
