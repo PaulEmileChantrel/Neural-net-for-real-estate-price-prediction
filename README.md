@@ -53,13 +53,25 @@ After training over 1000 epochs, we get the following results for the loss funct
   <img src='https://user-images.githubusercontent.com/96018383/203937654-84d3bdf0-8fe2-45ad-8c74-5d2919ef1499.png'>
  </p>
  
- After the training, we only manage to get 50% of the training set correct and 80% of the testing set. 
- (We consider a correct match if the price is correctly predicted within a +/- $50,000 range, which is a lot).
+
  
  From the above figure, we can see that the loss function stop improving on the testing set which means we can't improve the result by adding more epochs.
+
+To calculte the error, we considere a price match if the predicted price in with +/- x% where x is a variable between 5% and 30% (an acceptable value for x would be 10% but we want to see the results with higher value of x).
+We also calculte the error before training our model to get a randome error baseline : 
  
- The failure of predicting the real estate price correctly probably comes from the lack of enough data.
- First, we only have around 5000 properties(split between training and testing) and second, we have few data points for each property. We only have rooms information and the property location but we don't know if it's a house or an apartment, the number of floors, the sqft, whether it has a garden or not, what is the view, etc.
+| Margin of error for <br>a correct guess (x) | Correct random guess  | Correct guess with V1 training dataset | Correct guess with V1 test dataset |
+|---|---|---|---|
+| 5 % | 6 % | 20 % | 20 % |
+| 10 % | 15 % | 40 % | 38 % |
+| 15 %  | 22 % | 56 % | 52 % |
+| 20 % | 28 % | 70 % | 62 % |
+| 30 % | 47 % | 87 % | 81 % |
+
+We can see a good price prediction within a +/- 30% margin but the price prediction is not that great within a +/- 10% margin of error.
+
+This could due to 2 reasons : 
+First, we only have around 5000 properties(split between training and testing) and second, we have few data points for each property. We only have rooms information and the property location but we don't know if it's a house or an apartment, the number of floors, the sqft, whether it has a garden or not, what is the view, etc.
  
  If we try with a simple regression (with a gradient descent) we have similar results (regression.py)
  
@@ -76,15 +88,8 @@ To simplify our problem, we only keep data from New York City and its surroundin
 We also filter out rows with missing data for the bedrooms, bathrooms, house size and lot size.
 
 After cleaning, i.e. removing duplicate rows and rows with missing data and rows where the latitude and longitude were not found, we only have __ properties left.
+
 Here is the loss on the training and validation set during training.
 
-This time, we considere a price match if the predicted price in with +/- x% where x is a variable between 5% and 30%.
-We also calculte the error before training our model to get a randome error baseline : 
-| Accepted margin of error for <br>a correct guess ( +/-x) | Correct random guess  |
-|---------------------------------------------------------|-----------------------|
-| 5 %                                                     | 6 %                   |
-| 10 %                                                    | 15 %                  |
-| 15 %                                                    | 22 %                  |
-| 20 %                                                    | 28 %                  |
-| 30 %                                                    | 47 %                  |
+
 
