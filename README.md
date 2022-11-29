@@ -1,7 +1,7 @@
-# Neural Net for Toronto real estate price prediction
+# Neural Net for real estate price prediction
 
-In this project, we want to build a neural net to predict the price of Toronto real estate.
-To do this, we use the following dataset: https://www.kaggle.com/datasets/mangaljitsingh/torontoproperties
+In this project, we want to build a neural net to predict the price of real estate.
+To do this, we use the following dataset which gives the real estate price in the Toronto area: https://www.kaggle.com/datasets/mangaljitsingh/torontoproperties
 
 
 ## Data Cleaning
@@ -67,5 +67,11 @@ After training over 1000 epochs, we get the following results for the loss funct
  
 
 
+## Neural net with better data
 
+For the V2, we use the following data set : https://www.kaggle.com/datasets/ahmedshahriarsakib/usa-real-estate-dataset
+This dataset cointains real estate properties all over the US and have 2 additional parameters compare to our previous dataset : the house size and the lot size.
+
+To simplify our problem, we only keep data from New York City.
+We also filter out rows with missing data for the bedrooms, bathrooms, house size and lot size.
 
