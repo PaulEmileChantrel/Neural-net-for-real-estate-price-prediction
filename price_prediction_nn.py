@@ -77,7 +77,7 @@ tf.random.set_seed(1234)
 
 E_train = []
 E_cv = []
-price_error = 50000
+price_error = 0.1
 normalized_price_error = (price_error-mean_price)/max_minus_min_price
 
 model = Sequential([
@@ -89,7 +89,7 @@ model = Sequential([
     Dense(128,activation='relu'),
     Dense(1,activation='linear')
 
-],name='mnist_nn_v1')
+],name='re_nn_v1')
 
 model.compile(
     loss=tf.keras.losses.MeanSquaredError(),

@@ -40,9 +40,9 @@ def calculate_errors(model,X,y,E,price_error,mean_price,max_minus_min_price):
     # for i in range(len(prediction)):
     #     print(prediction[i],y[i])
     #     print('error = ',abs(prediction[i]-y[i])/prediction[i]*100,'%')
-    failed_X = [X[i,:] for i in range(len(prediction)) if not prediction[i]-price_error<=y[i]<=prediction[i]+price_error]
-    failed_prediction = [prediction[i] for i in range(len(prediction)) if not prediction[i]-price_error<=y[i]<=prediction[i]+price_error]
-    failed_y = [y[i] for i in range(len(prediction)) if not prediction[i]-price_error<=y[i]<=prediction[i]+price_error]
+    failed_X = [X[i,:] for i in range(len(prediction)) if not prediction[i]-prediction[i]*price_error<=y[i]<=prediction[i]+prediction[i]*price_error]
+    failed_prediction = [prediction[i] for i in range(len(prediction)) if not prediction[i]-prediction[i]*price_error<=y[i]<=prediction[i]+prediction[i]*price_error]
+    failed_y = [y[i] for i in range(len(prediction)) if not prediction[i]-prediction[i]*price_error<=y[i]<=prediction[i]+prediction[i]*price_error]
     percent_failed = round(len(failed_X)/test_size*100*100)/100
     print(f'{percent_failed} % of failure (or {len(failed_X)} out of {test_size})')
 
@@ -80,7 +80,7 @@ def compute_gradient(X, y, w, b):
     m,n = X.shape           #(number of examples, number of features)
     dj_dw = np.zeros((n,))
     dj_db = 0.
-    
+
     for i in range(m):
 
         err = (np.dot(X[i], w) + b) - y[i]
