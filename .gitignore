@@ -15,3 +15,5 @@ realtor_data_w_lat_long.csv
 nn_v2/*
 nn_v2_a_0p0001/*
 new_york_real_estate.csv
+*.csv
+*.html

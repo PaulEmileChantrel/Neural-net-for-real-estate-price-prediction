@@ -77,8 +77,7 @@ tf.random.set_seed(1234)
 
 E_train = []
 E_cv = []
-price_error = 0.1
-normalized_price_error = (price_error-mean_price)/max_minus_min_price
+
 
 model = Sequential([
     tf.keras.Input(shape=(8,)),
@@ -90,6 +89,12 @@ model = Sequential([
     Dense(1,activation='linear')
 
 ],name='re_nn_v1')
+
+p_error = [0.05,0.10,0.15,0.2,0.3]
+for p in p_error: #calcul of random error baseline
+    _,_,_,E_train = calculate_errors(model,X_train,y_train,E_train,p,mean_price,max_minus_min_price)
+    failed_X,failed_prediction,failed_y,E_cv = calculate_errors(model,X_test,y_test,E_cv,p,mean_price,max_minus_min_price)
+
 
 model.compile(
     loss=tf.keras.losses.MeanSquaredError(),
@@ -104,6 +109,9 @@ history = model.fit(
 
 
 plot_loss_tf(history)
-_,_,_,E_train = calculate_errors(model,X_train,y_train,E_train,price_error,mean_price,max_minus_min_price)
-failed_X,failed_prediction,failed_y,E_cv = calculate_errors(model,X_test,y_test,E_cv,price_error,mean_price,max_minus_min_price)
+
+for p in p_error: #calcul of error
+    _,_,_,E_train = calculate_errors(model,X_train,y_train,E_train,p,mean_price,max_minus_min_price)
+    failed_X,failed_prediction,failed_y,E_cv = calculate_errors(model,X_test,y_test,E_cv,p,mean_price,max_minus_min_price)
+
 plt.show()
