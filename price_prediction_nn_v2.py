@@ -20,25 +20,25 @@ import random
 from nn_utils_function import *
 # Import Data
 
-df = pd.read_csv('realtor-data.csv')
-#df_numbers = df.drop(columns=['address','location','region'])
+# df = pd.read_csv('realtor-data.csv')
+# #df_numbers = df.drop(columns=['address','location','region'])
+#
+#
+# # We only keep NYC
+# df1 = df[df['city']=='New York City']
+# df2 = df[df['city']=='New York']
+# df = pd.concat([df1,df2],ignore_index=True)
+#
+#
+# #We remove row with empty value
+# df = df.fillna('')
+# df = df[df['bath']!='']
+# df = df[df['bed']!='']
+# df = df[df['acre_lot']!='']
+# df = df[df['house_size']!='']
+# df.drop_duplicates(ignore_index=True,inplace=True,subset=['full_address'])
+# df.to_csv('new_york_real_estate.csv')
 
-
-# We only keep NYC
-df1 = df[df['city']=='New York City']
-df2 = df[df['city']=='New York']
-df = pd.concat([df1,df2],ignore_index=True)
-
-
-#We remove row with empty value
-df = df.fillna('')
-df = df[df['bath']!='']
-df = df[df['bed']!='']
-df = df[df['acre_lot']!='']
-df = df[df['house_size']!='']
-df.drop_duplicates(ignore_index=True,inplace=True,subset=['full_address'])
-df.to_csv('new_york_real_estate.csv')
-print(df.shape)
 # regions = set(df['region'])
 # r_dict = {}
 # i = 0
@@ -51,13 +51,16 @@ print(df.shape)
 #     df.at[i,'region_idx'] = r_dict[df['region'][i]]
 
 #df['rooms'] = df['bedrooms']+df['bathrooms']
-
+df = pd.read_csv('cleaned_realtor_data_w_lat_long.csv',sep=';')
 
 #Normalized the Data
 df['bed'],mean_bedrooms,max_minus_min_bedrooms = normalize_data(df['bed'])
 df['bath'],mean_bathrooms,max_minus_min_bathrooms = normalize_data(df['bath'])
 df['acre_lot'],mean_acre,max_minus_min_acre = normalize_data(df['acre_lot'])
 df['house_size'],mean_house,max_minus_min_house = normalize_data(df['house_size'])
+df['latitude'],mean_latitude,max_minus_min_latitude = normalize_data(df['latitude'])
+df['longitude'],mean_longitude,max_minus_min_longitude = normalize_data(df['longitude'])
+df['zip_code'],mean_zip_code,max_minus_min_zip_code = normalize_data(df['zip_code'])
 
 
 df['price'] = np.log(df['price'])
@@ -70,17 +73,14 @@ df.to_csv('test.csv')
 
 
 #split between data (X) and label(y)
-x_df = df[['bed','bath','acre_lot','house_size']]
+x_df = df[['bed','bath','acre_lot','house_size','latitude','longitude','zip_code']]
 X = x_df.to_numpy().astype('float32')
 y = df['price'].to_numpy().astype('float32')
-
-
 
 
 X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.15, random_state=1)
 print(X_train.shape,X_test.shape,y_train.shape,y_test.shape)
 # print(X_train,y_train)
-
 
 tf.random.set_seed(1234)
 
@@ -88,12 +88,12 @@ E_train = []
 E_cv = []
 
 model = Sequential([
-    tf.keras.Input(shape=(4,)),
-    #Dense(2048, activation='relu'),
-    #Dense(1024, activation='relu'),
-    #Dense(512, activation='relu'),
-    Dense(25, activation='relu'),
-    Dense(12,activation='relu'),
+    tf.keras.Input(shape=(X_train.shape[1],)),
+    Dense(2048, activation='relu'),
+    Dense(1024, activation='relu'),
+    Dense(512, activation='relu'),
+    Dense(256, activation='relu'),
+    Dense(128,activation='relu'),
     Dense(1,activation='linear')
 
 ],name='re_nn_v2')
@@ -105,19 +105,19 @@ for p in p_error: #calcul of random error baseline
 
 model.compile(
     loss=tf.keras.losses.MeanSquaredError(),
-    optimizer=tf.keras.optimizers.Adam(learning_rate=0.01),
+    optimizer=tf.keras.optimizers.Adam(learning_rate=0.00001),
 )
 
 history = model.fit(
     X_train,y_train,
-    epochs=500,
+    epochs=100,
     validation_data=(X_test,y_test)
 )
 
 model.save('nn_v2_a_0p0001')
 plot_loss_tf(history)
 
-_for p in p_error: #calcul of error
+for p in p_error: #calcul of error
     _,_,_,E_train = calculate_errors(model,X_train,y_train,E_train,p,mean_price,max_minus_min_price)
     failed_X,failed_prediction,failed_y,E_cv = calculate_errors(model,X_test,y_test,E_cv,p,mean_price,max_minus_min_price)
 

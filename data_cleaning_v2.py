@@ -13,27 +13,33 @@ df = pd.read_csv('realtor-data.csv')
 df1 = df[df['city']=='New York City']
 df1['city_code'] = 0
 df2 = df[df['city']=='New York']
-df1['city_code'] = 1
+df2['city_code'] = 1
 df3 = df[df['city']=='Brooklyn']
-df1['city_code'] = 2
+df3['city_code'] = 2
 df4 = df[df['city']=='Manhattan']
-df1['city_code'] = 3
+df4['city_code'] = 3
 df5 = df[df['city']=='Bronx']
-df1['city_code'] = 4
-df5 = df[df['city']=='Jersay City']
-df1['city_code'] = 5
-df = pd.concat([df1,df2,df3,df4,df5],ignore_index=True)
-
+df5['city_code'] = 4
+df6 = df[df['city']=='Jersey City']
+df6['city_code'] = 5
+# df = pd.concat([df1,df2,df3,df4,df5,df6],ignore_index=True)
+# print(df.shape)
 
 #We remove row with empty value
 df = df.fillna('')
 df = df[df['bath']!='']
 df = df[df['bed']!='']
-df = df[df['acre_lot']!='']
 df = df[df['house_size']!='']
 df = df[df['street']!='']
 df.drop_duplicates(ignore_index=True,inplace=True,subset=['full_address'])
+#If we don't have a acre lot data but we have a house size, we consider that the acre lot is the house size
+sub_df = df[df['acre_lot']=='']
+df = df[df['acre_lot']!='']
+sub_df['acre_lot'] = sub_df['house_size']/43560
 
+df = pd.concat([df,sub_df],ignore_index=True)
+
+df.to_csv('realtor_data_wo_lat_long.csv', index=False)
 print(df.shape)
 # Step 1 : Convert the addresses into latitude and longitude
 locator = Nominatim(user_agent="myGeocoder")
@@ -57,9 +63,9 @@ df = df[df['latitude']!='']
 
 #df.drop(columns=['Unnamed: 0','point','altitude','lat','lon','is_appt'],inplace=True)
 df.drop(columns=['point','altitude'],inplace=True)
-df.to_csv('cleaned_realtor_data_w_lat_long.csv',sep=';', index=False)
+df.to_csv('cleaned_realtor_data_w_lat_long.csv', index=False)
 
-df= pd.read_csv('cleaned_realtor_data_w_lat_long.csv',sep=';')
+df= pd.read_csv('cleaned_realtor_data_w_lat_long.csv')
 
 #Step 3: plot data
 import folium
@@ -80,7 +86,7 @@ map1 = folium.Map(
 # ax = df['price'].plot.hist(bins=30)
 # plt.yscale('log')
 # plt.xlabel('Price')
-# plt.title('Price Distribution of Greatest Toronto Area property')
+# plt.title('Price Distribution of New York properties')
 # plt.show()
 
 # df['rooms'] = df['bathrooms']+df['bedrooms']
