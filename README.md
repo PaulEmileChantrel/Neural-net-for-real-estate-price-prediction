@@ -89,17 +89,30 @@ We also filter out rows with missing data for the bedrooms, bathrooms, house siz
 
 
 
-After cleaning, i.e. removing duplicate rows and rows with missing data and rows where the latitude and longitude were not found, we only have 1200 properties left.
+After cleaning, i.e. removing duplicate rows and rows with missing data and rows where the latitude and longitude were not found, we only have 3700 properties left.
 
 <p align='center'>
   <img width="724" alt='New York property prices neural net' src='https://user-images.githubusercontent.com/96018383/204666557-2cd5ac1a-e2d9-4d25-a186-d945fe11b1fa.png'>
  </p>
+If we zoom on Mahattan, we can see the wollofing properties :
+<p align='center'>
+  <img width="724" alt='New York property prices neural net' src='https://user-images.githubusercontent.com/96018383/204666557-2cd5ac1a-e2d9-4d25-a186-d945fe11b1fa.png'>
+ </p>
+ 
+ We introduce again the parameter $r$ such as $r = sqrt{(\mathrm{lat}-\mathrm{lat_0})^2+(\mathrm{long}-\mathrm{long_0})^2}$ where $\mathrm{lat_0}$ and $\mathrm{long_0}$ are coordinates in Downtown Manhattan. We can see a clear correlation between this parameter and the propertis price.
+ 
+ <p align='center'>
+  <img alt='New York property prices distribution neural net' src='https://user-images.githubusercontent.com/96018383/204667377-b4646145-b6b5-48d1-a8b1-ece2d305e92e.png'>
+ </p>
 
 We can also see the price distribution : 
+
 
 <p align='center'>
   <img alt='New York property prices distribution neural net' src='https://user-images.githubusercontent.com/96018383/204667377-b4646145-b6b5-48d1-a8b1-ece2d305e92e.png'>
  </p>
+
+
 
 Here is the loss on the training and validation set during training.
 
@@ -107,15 +120,20 @@ Here is the loss on the training and validation set during training.
   <img alt='New York property prices distribution neural net loss' src='https://user-images.githubusercontent.com/96018383/204670844-ee8b2d6a-0cc5-48c1-b08e-cdfadf4606e1.png'>
  </p>
 
-We can see the loss quickly improves on the validation set but then rise up. We overfitted the data.
+The loss function doesn't improve anymore.
 
-Here is the error we get at 25 epochs : 
 
-| Margin of error for  a correct guess (x) | Correct random guess  | Correct guess with V2 training dataset (without lat and long) | Correct guess with V2 test dataset (without lat and long) | Correct guess with V2 training dataset (with lat and long) | Correct guess with V2 test dataset (with lat and long) |
-|---|---|---|---|---|---|
-| +/- 5 % | 4 % | 8 % | 8 % | 7 % | 6 % |
-| +/- 10 % | 8 % | 17 % | 18 % | 34 % | 30 % |
-| +/- 15 %  | 12 % | 24 % | 27 % | 48 % | 42 % |
-| +/- 20 % | 16 % | 31 % | 30 % | 60 % | 54 % |
-| +/- 30 % | 25 % | 47 % | 47 % | 77 %  | 73 % |
 
+Here is the error we get at 400 epochs : 
+
+| Margin of error for  a correct guess (x) | Correct random guess  | Correct guess with V2 training dataset | Correct guess with V2 test dataset |
+|---|---|---|---|
+| +/- 1 % | 1.5 % | 4 % | 3 % |
+| +/- 5 % | 3 % | 22 % | 17 % |
+| +/- 10 % | 8 % | 43 % | 38 % |
+| +/- 15 %  | 13 % | 58 % | 53 % |
+| +/- 20 % | 20 % | 70 % | 63 % |
+| +/- 30 % | 31 % | 88 %  | 81 % |
+
+We have similar results compare to the previous model. This time however we used better dditionnal parametters (like house size) but less data points.
+We can try to improve the number of preperties.
