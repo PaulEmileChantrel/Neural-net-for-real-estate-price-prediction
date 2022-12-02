@@ -95,12 +95,12 @@ After cleaning, i.e. removing duplicate rows and rows with missing data and rows
   <img width="724" alt='New York property prices neural net' src='https://user-images.githubusercontent.com/96018383/205267974-93552113-5070-49eb-8447-804174777265.png'>
  </p>
 
-If we zoom on Mahattan, we can see the wollofing properties :
+If we zoom in on Manhattan, we can see the following properties :
 <p align='center'>
-  <img width="724" alt='New York property prices neural net' src='https://user-images.githubusercontent.com/96018383/204666557-2cd5ac1a-e2d9-4d25-a186-d945fe11b1fa.png'>
+  <img width="724" alt='New York property prices neural net' src='https://user-images.githubusercontent.com/96018383/205272032-167fe7ef-6b74-427d-9ab3-779598582f0b.png'>
  </p>
- 
- We introduce again the parameter $r$ such as $r = sqrt{(\mathrm{lat}-\mathrm{lat_0})^2+(\mathrm{long}-\mathrm{long_0})^2}$ where $\mathrm{lat_0}$ and $\mathrm{long_0}$ are coordinates in Downtown Manhattan. We can see a clear correlation between this parameter and the propertis price.
+
+ We introduce again the parameter $r$ such as $r = sqrt{(\mathrm{lat}-\mathrm{lat_0})^2+(\mathrm{long}-\mathrm{long_0})^2}$ where $\mathrm{lat_0}$ and $\mathrm{long_0}$ are coordinates in Downtown Manhattan. We can see a clear correlation between this parameter and the property price.
  
  <p align='center'>
   <img alt='New York property prices distribution neural net' src='https://user-images.githubusercontent.com/96018383/205268089-6e81273b-f94f-46cc-a060-b7fe776671a3.png'>
@@ -113,6 +113,7 @@ We can also see the price distribution :
 <p align='center'>
   <img alt='New York property prices distribution neural net' src='https://user-images.githubusercontent.com/96018383/204667377-b4646145-b6b5-48d1-a8b1-ece2d305e92e.png'>
  </p>
+
 
 
 
@@ -138,5 +139,5 @@ Here is the error we get at 400 epochs :
 | +/- 20 % | 20 % | 70 % | 63 % |
 | +/- 30 % | 31 % | 88 %  | 81 % |
 
-We have similar results compare to the previous model. This time however we used better dditionnal parametters (like house size) but less data points.
-We can try to improve the number of preperties.
+We have similar results compared to the previous model. This time however we used better additional parameters (like house size) but fewer data points.
+We can try to improve the number of properties.
