@@ -6,67 +6,82 @@ import geopandas
 from geopy.geocoders import Nominatim
 from geopy.extra.rate_limiter import RateLimiter
 from nn_utils_function import *
-
-df = pd.read_csv('realtor-data.csv')
+from ast import literal_eval as make_tuple
+#df = pd.read_csv('realtor-data.csv')
 
 # We only keep NYC
-df1 = df[df['city']=='New York City']
-df1['city_code'] = 0
-df2 = df[df['city']=='New York']
-df2['city_code'] = 1
-df3 = df[df['city']=='Brooklyn']
-df3['city_code'] = 2
-df4 = df[df['city']=='Manhattan']
-df4['city_code'] = 3
-df5 = df[df['city']=='Bronx']
-df5['city_code'] = 4
-df6 = df[df['city']=='Jersey City']
-df6['city_code'] = 5
+# df1 = df[df['city']=='New York City']
+# df1['city_code'] = 0
+# df2 = df[df['city']=='New York']
+# df2['city_code'] = 1
+# df3 = df[df['city']=='Brooklyn']
+# df3['city_code'] = 2
+# df4 = df[df['city']=='Manhattan']
+# df4['city_code'] = 3
+# df5 = df[df['city']=='Bronx']
+# df5['city_code'] = 4
+# df6 = df[df['city']=='Jersey City']
+# df6['city_code'] = 5
 # df = pd.concat([df1,df2,df3,df4,df5,df6],ignore_index=True)
 # print(df.shape)
 
-#We remove row with empty value
-df = df.fillna('')
-df = df[df['bath']!='']
-df = df[df['bed']!='']
-df = df[df['house_size']!='']
-df = df[df['street']!='']
-df.drop_duplicates(ignore_index=True,inplace=True,subset=['full_address'])
-#If we don't have a acre lot data but we have a house size, we consider that the acre lot is the house size
-sub_df = df[df['acre_lot']=='']
-df = df[df['acre_lot']!='']
-sub_df['acre_lot'] = sub_df['house_size']/43560
-
-df = pd.concat([df,sub_df],ignore_index=True)
-
-df.to_csv('realtor_data_wo_lat_long.csv', index=False)
-print(df.shape)
-# Step 1 : Convert the addresses into latitude and longitude
-locator = Nominatim(user_agent="myGeocoder")
-# 1 - conveneint function to delay between geocoding calls
-geocode = RateLimiter(locator.geocode, min_delay_seconds=1)
-# 2- - create location column
-df['location'] = df['full_address'].apply(geocode)
-# 3 - create longitude, laatitude and altitude from location column (returns tuple)
-df['point'] = df['location'].apply(lambda loc: tuple(loc.point) if loc else None)
-# 4 - split point column into latitude, longitude and altitude columns
-df[['latitude', 'longitude', 'altitude']] = pd.DataFrame(df['point'].tolist(), index=df.index)
-
-df.to_csv('realtor_data_w_lat_long.csv', index=False)
-
-#Step 2 : clean the data -> only keep row with, long and lat and delete useless columns
-
+# #We remove row with empty value
+# df = df.fillna('')
+# df = df[df['bath']!='']
+# df = df[df['bed']!='']
+# df = df[df['house_size']!='']
+# df = df[df['street']!='']
+# df.drop_duplicates(ignore_index=True,inplace=True,subset=['full_address'])
+# #If we don't have a acre lot data but we have a house size, we consider that the acre lot is the house size
+# sub_df = df[df['acre_lot']=='']
+# df = df[df['acre_lot']!='']
+# sub_df['acre_lot'] = sub_df['house_size']/43560
+#
+# df = pd.concat([df,sub_df],ignore_index=True)
+#
+# df.to_csv('realtor_data_wo_lat_long.csv', index=False)
+# print(df.shape)
+# # Step 1 : Convert the addresses into latitude and longitude
+# locator = Nominatim(user_agent="myGeocoder")
+# # 1 - conveneint function to delay between geocoding calls
+# geocode = RateLimiter(locator.geocode, min_delay_seconds=0.2)
+# # 2- - create location column
+# df['location'] = df['full_address'].apply(geocode)
+# df.to_csv('realtor_data_w_lat_long.csv', index=False)
+# df = pd.read_csv('realtor_data_w_lat_long.csv')
+# df = df.fillna('')
+# df = df[df['point']!='']
+#
+# # # 3 - create longitude, laatitude and altitude from location column (returns tuple)
+# # df['point'] = df['location'].apply(lambda loc: tuple(loc.point) if loc else None)
+# # # 4 - split point column into latitude, longitude and altitude columns
+# arr_of_tuple = []
+# for i in range(df.shape[0]):
+#     l = make_tuple(df['point'][i])
+#     arr_of_tuple.append(l)
+#
+# df[['latitude', 'longitude', 'altitude']] = pd.DataFrame(arr_of_tuple, index=df.index)
+# print(df)
+# df.to_csv('realtor_data_w_lat_long.csv', index=False)
+#
+# #Step 2 : clean the data -> only keep row with, long and lat and delete useless columns
+#
 df = pd.read_csv('realtor_data_w_lat_long.csv')
-df = df.fillna('')
-df = df[df['latitude']!='']
+# df = df.fillna('')
+# df = df[df['latitude']!='']
 
 
 #df.drop(columns=['Unnamed: 0','point','altitude','lat','lon','is_appt'],inplace=True)
 df.drop(columns=['point','altitude'],inplace=True)
+#df.to_csv('cleaned_realtor_data_w_lat_long.csv', index=False)
+
+
+
+df['r'],df['theta']= carth_to_polar(df['latitude'],df['longitude'],x0= 40.720127,y0=-73.990247)
+df = df[df['r']<1]
 df.to_csv('cleaned_realtor_data_w_lat_long.csv', index=False)
-
-df= pd.read_csv('cleaned_realtor_data_w_lat_long.csv')
-
+df = pd.read_csv('cleaned_realtor_data_w_lat_long.csv')
+print(df.shape)
 #Step 3: plot data
 import folium
 import webbrowser
@@ -100,14 +115,15 @@ map1 = folium.Map(
 # plt.title('Real Estate price as a function of the rooms number')
 # plt.show()
 #
-# r,theta = carth_to_polar(df['latitude'],df['longitude'])
+# r,theta = carth_to_polar(df['latitude'],df['longitude'],x0= 40.720127,y0=-73.990247)
 #
-# x =  r.to_numpy()
+# x = r.to_numpy()
 # y = df['price'].to_numpy()
 # plt.scatter(x,y,marker='+')
 # plt.ylabel('Price')
-# plt.xlabel('Distance ftom Downtown Toronto')
-# plt.title('Real Estate price as a function of the distance from Downtown Toronto')
+# plt.yscale('log')
+# plt.xlabel('Distance ftom Downtown Manhattan')
+# plt.title('Real Estate price as a function of the distance from Downtown Manhattan')
 # plt.show()
 
 def color_producer(col):

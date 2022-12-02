@@ -52,11 +52,9 @@ def calculate_errors(model,X,y,E,price_error,mean_price,max_minus_min_price):
     return np.array(failed_X),np.array([failed_prediction]).T,np.array([failed_y]).T,E
 
 
-def carth_to_polar(x,y):
+def carth_to_polar(x,y,x0 =43.647144,y0=-79.381204):#Toronto Union station
 
-    x0 = 43.647144
-    y0 = -79.381204 #Toronto Union station
-
+    
     r = np.sqrt((x-x0)**2+(y-y0)**2)
     theta = np.arctan((x-x0)/(y-y0))
     return r,theta

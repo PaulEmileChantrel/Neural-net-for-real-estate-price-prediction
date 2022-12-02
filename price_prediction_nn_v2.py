@@ -51,8 +51,8 @@ from nn_utils_function import *
 #     df.at[i,'region_idx'] = r_dict[df['region'][i]]
 
 #df['rooms'] = df['bedrooms']+df['bathrooms']
-df = pd.read_csv('cleaned_realtor_data_w_lat_long.csv',sep=';')
-
+df = pd.read_csv('cleaned_realtor_data_w_lat_long.csv')
+df = df[df['zip_code']=='']
 #Normalized the Data
 df['bed'],mean_bedrooms,max_minus_min_bedrooms = normalize_data(df['bed'])
 df['bath'],mean_bathrooms,max_minus_min_bathrooms = normalize_data(df['bath'])
@@ -60,6 +60,9 @@ df['acre_lot'],mean_acre,max_minus_min_acre = normalize_data(df['acre_lot'])
 df['house_size'],mean_house,max_minus_min_house = normalize_data(df['house_size'])
 df['latitude'],mean_latitude,max_minus_min_latitude = normalize_data(df['latitude'])
 df['longitude'],mean_longitude,max_minus_min_longitude = normalize_data(df['longitude'])
+df['r'],mean_r,max_minus_min_r = normalize_data(df['r'])
+df['theta'],mean_theta,max_minus_min_theta = normalize_data(df['theta'])
+
 df['zip_code'],mean_zip_code,max_minus_min_zip_code = normalize_data(df['zip_code'])
 
 
@@ -73,10 +76,9 @@ df.to_csv('test.csv')
 
 
 #split between data (X) and label(y)
-x_df = df[['bed','bath','acre_lot','house_size','latitude','longitude','zip_code']]
+x_df = df[['bed','bath','acre_lot','house_size','latitude','longitude','zip_code','r','theta']]
 X = x_df.to_numpy().astype('float32')
 y = df['price'].to_numpy().astype('float32')
-
 
 X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.15, random_state=1)
 print(X_train.shape,X_test.shape,y_train.shape,y_test.shape)
@@ -98,23 +100,23 @@ model = Sequential([
 
 ],name='re_nn_v2')
 
-p_error = [0.05,0.10,0.15,0.2,0.3]
+p_error = [0.01,0.05,0.10,0.15,0.2,0.3]
 for p in p_error: #calcul of random error baseline
     _,_,_,E_train = calculate_errors(model,X_train,y_train,E_train,p,mean_price,max_minus_min_price)
     failed_X,failed_prediction,failed_y,E_cv = calculate_errors(model,X_test,y_test,E_cv,p,mean_price,max_minus_min_price)
 
 model.compile(
     loss=tf.keras.losses.MeanSquaredError(),
-    optimizer=tf.keras.optimizers.Adam(learning_rate=0.00001),
+    optimizer=tf.keras.optimizers.Adam(learning_rate=0.000003),
 )
 
 history = model.fit(
     X_train,y_train,
-    epochs=100,
+    epochs=400,
     validation_data=(X_test,y_test)
 )
 
-model.save('nn_v2_a_0p0001')
+model.save('nn_v2_a_0p00001')
 plot_loss_tf(history)
 
 for p in p_error: #calcul of error
@@ -122,3 +124,5 @@ for p in p_error: #calcul of error
     failed_X,failed_prediction,failed_y,E_cv = calculate_errors(model,X_test,y_test,E_cv,p,mean_price,max_minus_min_price)
 
 plt.show()
+
+#model.evaluate(X_test,y_test)
