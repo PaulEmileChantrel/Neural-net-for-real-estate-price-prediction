@@ -92,8 +92,9 @@ We also filter out rows with missing data for the bedrooms, bathrooms, house siz
 After cleaning, i.e. removing duplicate rows and rows with missing data and rows where the latitude and longitude were not found, we only have 3700 properties left.
 
 <p align='center'>
-  <img width="724" alt='New York property prices neural net' src='https://user-images.githubusercontent.com/96018383/204666557-2cd5ac1a-e2d9-4d25-a186-d945fe11b1fa.png'>
+  <img width="724" alt='New York property prices neural net' src='https://user-images.githubusercontent.com/96018383/205267974-93552113-5070-49eb-8447-804174777265.png'>
  </p>
+
 If we zoom on Mahattan, we can see the wollofing properties :
 <p align='center'>
   <img width="724" alt='New York property prices neural net' src='https://user-images.githubusercontent.com/96018383/204666557-2cd5ac1a-e2d9-4d25-a186-d945fe11b1fa.png'>
@@ -102,8 +103,9 @@ If we zoom on Mahattan, we can see the wollofing properties :
  We introduce again the parameter $r$ such as $r = sqrt{(\mathrm{lat}-\mathrm{lat_0})^2+(\mathrm{long}-\mathrm{long_0})^2}$ where $\mathrm{lat_0}$ and $\mathrm{long_0}$ are coordinates in Downtown Manhattan. We can see a clear correlation between this parameter and the propertis price.
  
  <p align='center'>
-  <img alt='New York property prices distribution neural net' src='https://user-images.githubusercontent.com/96018383/204667377-b4646145-b6b5-48d1-a8b1-ece2d305e92e.png'>
+  <img alt='New York property prices distribution neural net' src='https://user-images.githubusercontent.com/96018383/205268089-6e81273b-f94f-46cc-a060-b7fe776671a3.png'>
  </p>
+
 
 We can also see the price distribution : 
 
@@ -117,8 +119,9 @@ We can also see the price distribution :
 Here is the loss on the training and validation set during training.
 
 <p align='center'>
-  <img alt='New York property prices distribution neural net loss' src='https://user-images.githubusercontent.com/96018383/204670844-ee8b2d6a-0cc5-48c1-b08e-cdfadf4606e1.png'>
+  <img alt='New York property prices distribution neural net loss' src='https://user-images.githubusercontent.com/96018383/205268220-f3bee235-05eb-4f65-9e9a-93123ccd0f36.png'>
  </p>
+
 
 The loss function doesn't improve anymore.
 
