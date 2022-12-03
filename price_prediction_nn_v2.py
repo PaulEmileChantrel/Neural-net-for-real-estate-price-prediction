@@ -52,7 +52,11 @@ from nn_utils_function import *
 
 #df['rooms'] = df['bedrooms']+df['bathrooms']
 df = pd.read_csv('cleaned_realtor_data_w_lat_long.csv')
-df = df[df['zip_code']=='']
+df = df.fillna('')
+df = df[df['zip_code']!='']
+
+
+df['price_per_sqft'] = df['price']/df['house_size']
 #Normalized the Data
 df['bed'],mean_bedrooms,max_minus_min_bedrooms = normalize_data(df['bed'])
 df['bath'],mean_bathrooms,max_minus_min_bathrooms = normalize_data(df['bath'])
@@ -64,6 +68,7 @@ df['r'],mean_r,max_minus_min_r = normalize_data(df['r'])
 df['theta'],mean_theta,max_minus_min_theta = normalize_data(df['theta'])
 
 df['zip_code'],mean_zip_code,max_minus_min_zip_code = normalize_data(df['zip_code'])
+df['price_per_sqft'],mean_price_per_sqft,max_minus_min_price_per_sqft = normalize_data(df['price_per_sqft'])
 
 
 df['price'] = np.log(df['price'])
@@ -78,7 +83,7 @@ df.to_csv('test.csv')
 #split between data (X) and label(y)
 x_df = df[['bed','bath','acre_lot','house_size','latitude','longitude','zip_code','r','theta']]
 X = x_df.to_numpy().astype('float32')
-y = df['price'].to_numpy().astype('float32')
+y = df['price_per_sqft'].to_numpy().astype('float32')
 
 X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.15, random_state=1)
 print(X_train.shape,X_test.shape,y_train.shape,y_test.shape)
@@ -112,7 +117,7 @@ model.compile(
 
 history = model.fit(
     X_train,y_train,
-    epochs=400,
+    epochs=300,
     validation_data=(X_test,y_test)
 )
 
