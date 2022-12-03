@@ -169,8 +169,34 @@ Increasing the number of properties did not improved our model.
 ### How could we improve the prediction?
 We could try to predict the price per sqft instead of the price. This could improve our prediction since this features is more normalized.
 We modify the price_prediction_nn_V2.py to predict the price per sqft and we obatin the following loss function after training on 300 epochs.
+<p align='center'>
+  <img alt='New York property prices distribution neural net loss' src='https://user-images.githubusercontent.com/96018383/205416306-566d8734-046f-40f6-92bb-3568f56ff0a8.png'>
+ </p>
+We have the following results:
+| Margin of error for  a correct guess (x) | Correct random guess  | Correct guess with V2 training dataset | Correct guess with V2 test dataset |
+|---|---|---|---|
+| +/- 1 % | 3 % | 13 % | 12 % |
+| +/- 5 % | 14 % | 56 % | 51 % |
+| +/- 10 % | 30 % | 79 % | 76 % |
+| +/- 15 %  | 41 % | 88 % | 85 % |
+| +/- 20 % | 69 % | 92 % | 91 % |
+| +/- 30 % | 89 % | 96 %  | 95 % |
+
+We can see much better results with this strategy!
+
+Another way to improve the prediction would be to put more enphasis on the location.
+For exemple, when we want to guess the properties at location (lat,long), we could look at the price per sqft of the n nearest properties and estimate the new property price. This would be done without NN.
+
+<p align='center'>
+  <img alt='New York property prices distribution neural net loss' src='https://user-images.githubusercontent.com/96018383/205424115-7118a028-b9e6-49b4-86c6-29c4c231cbac.png'>
+ </p>
+
+The results are not as good as the previous one.
+
+## Conclusion
+
+We were able to make a model to predict the price of a real estate property with 76% accuracy within a +/- 10% range.
+A key element was to create new features like the price per sqft.
 
 
 
-One way to improve the prediction would be to put more enphasis on the location.
-For exemple, when we want to guess the properties at location (lat,long), we could look at the price per sqft of the n nearest properties (where n could be a number between 5 and 10) and estimate the new property price. This would be done without NN.
