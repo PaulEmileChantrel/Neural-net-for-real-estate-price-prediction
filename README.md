@@ -28,6 +28,7 @@ Here is the same data when we zoom in on Toronto Downtown :
 We can also look at the price distribution of the property (with a log scale for the y-axis):
 <p align='center'>
 <img alt='Toronto property prices distribution neural net' src='https://user-images.githubusercontent.com/96018383/203933963-7ebcf916-7d2c-4603-a4c5-bac250367046.png'>
+
 </p>
 
 From this figure, we can see that most of the real estate price is between $0 and $500,000. The frequency of apparition is inverlsely correlated with the price.
@@ -140,4 +141,36 @@ Here is the error we get at 400 epochs :
 | +/- 30 % | 31 % | 88 %  | 81 % |
 
 We have similar results compared to the previous model. This time however we used better additional parameters (like house size) but fewer data points.
-We can try to improve the number of properties.
+
+We can try to improve the number of properties. If we keep every properties around a rafius $r$ 4 times higher, we now have around 14000 datapoints.
+
+Here is the loss function we obtain after training on 400 epochs.
+<p align='center'>
+  <img alt='New York property prices distribution neural net loss' src='https://user-images.githubusercontent.com/96018383/205403724-c18d885a-4de8-4ca1-a804-4ac4f585003f.png'>
+ </p>
+
+
+
+The loss function for the validation set does not improve anymore which means our model doens not need more training.
+
+We have the following results : 
+| Margin of error for  a correct guess (x) | Correct random guess  | Correct guess with V2 training dataset | Correct guess with V2 test dataset |
+|---|---|---|---|
+| +/- 1 % | 1.5 % | 4 % | 3 % |
+| +/- 5 % | 6 % | 19 % | 17 % |
+| +/- 10 % | 8 % | 36 % | 32 % |
+| +/- 15 %  | 13 % | 51 % | 47 % |
+| +/- 20 % | 25 % | 63 % | 58 % |
+| +/- 30 % | 37 % | 79 %  | 73 % |
+
+These results are similar to the previous one. We don't have any improvement and they are even a bit worse.
+Increasing the number of properties did not improved our model.
+
+### How could we improve the prediction?
+We could try to predict the price per sqft instead of the price. This could improve our prediction since this features is more normalized.
+We modify the price_prediction_nn_V2.py to predict the price per sqft and we obatin the following loss function after training on 300 epochs.
+
+
+
+One way to improve the prediction would be to put more enphasis on the location.
+For exemple, when we want to guess the properties at location (lat,long), we could look at the price per sqft of the n nearest properties (where n could be a number between 5 and 10) and estimate the new property price. This would be done without NN.
