@@ -173,6 +173,7 @@ We modify the price_prediction_nn_V2.py to predict the price per sqft and we oba
   <img alt='New York property prices distribution neural net loss' src='https://user-images.githubusercontent.com/96018383/205416306-566d8734-046f-40f6-92bb-3568f56ff0a8.png'>
  </p>
 We have the following results:
+
 | Margin of error for  a correct guess (x) | Correct random guess  | Correct guess with V2 training dataset | Correct guess with V2 test dataset |
 |---|---|---|---|
 | +/- 1 % | 3 % | 13 % | 12 % |
